@@ -1,9 +1,35 @@
 <script setup>
+import Table from '@/Components/Liv/Table.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
+
+const props = defineProps({
+    users: {
+        type: Object,
+        default: () => { }
+    },
+    pageOptions: {
+        type: Array,
+        default: () => []
+    },
+    limit: {
+        type: Number,
+        default: 10
+    },
+    allIds: {
+        type: Array,
+        default: () => []
+    },
+    columns: {
+        type: Array,
+        default: () => []
+    }
+})
+
 </script>
 
 <template>
+
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
@@ -14,7 +40,8 @@ import { Head } from '@inertiajs/vue3';
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">You're logged in!</div>
+                    <Table :items="users" :page-options="pageOptions" :limit="limit" :all-ids="allIds"
+                        :columns="columns" module="user" />
                 </div>
             </div>
         </div>

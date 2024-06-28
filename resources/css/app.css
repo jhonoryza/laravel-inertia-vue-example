@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+@import '../../node_modules/flowbite-vue/dist/index.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
