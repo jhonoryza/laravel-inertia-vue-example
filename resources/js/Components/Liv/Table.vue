@@ -6,13 +6,15 @@ import {
     IconFilterFilled,
     IconTableColumn,
     IconSearch,
-    IconX
+    IconX,
+    IconFilePlus,
 } from '@tabler/icons-vue';
 import {FwbPagination} from 'flowbite-vue';
 import {computed, reactive, ref, watch, watchEffect} from 'vue';
 import AppConfirmDeleteDialog from './Overlay/AppConfirmDeleteDialog.vue';
 import Checkbox from './Checkbox.vue';
 import InputText from './InputText.vue';
+import Button from "@/Components/Liv/Button.vue";
 
 const props = defineProps({
     items: {
@@ -336,6 +338,16 @@ const onPageChanged = (page) => {
                     </div>
                 </Transition>
                 <!-- end toggle columns -->
+
+                <!-- create record -->
+                <button type="button"
+                        class="flex items-center hover:cursor-pointer text-gray-600 hover:text-gray-400 dark:hover:text-gray-300 dark:text-gray-100"
+                        @click="route(`${props.module}.create`)"
+                >
+                    <IconFilePlus class="size-6"/>
+                    <span>New</span>
+                </button>
+                <!-- end create record -->
             </div>
             <!-- end toggle columns, search and filter -->
         </div>
