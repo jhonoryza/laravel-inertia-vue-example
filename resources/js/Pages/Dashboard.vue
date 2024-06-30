@@ -47,7 +47,7 @@ const props = defineProps({
         <div class="py-12 max-w-7xl mx-auto sm:px-6 lg:px-8 shadow-sm sm:rounded-lg">
 
             <Table :items="users" :page-options="pageOptions" :limit="limit" :all-ids="allIds"
-                   :columns="columns" module="user" :filters="filters">
+                   :columns="columns" module="user" :filters="filters" title="Users Table">
 
                 <!-- bulk action slot -->
                 <template #bulkaction="{ selectedRows, confirmDelete, route, module }">

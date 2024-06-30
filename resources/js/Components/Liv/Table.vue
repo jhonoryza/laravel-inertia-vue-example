@@ -17,10 +17,10 @@ import InputText from './InputText.vue';
 import Button from "@/Components/Liv/Button.vue";
 
 const props = defineProps({
+    title: String,
     items: {
         type: Object,
-        default: () => {
-        }
+        default: () => {}
     },
     pageOptions: {
         type: Array,
@@ -40,7 +40,8 @@ const props = defineProps({
     },
     module: {
         type: String,
-        default: ''
+        default: '',
+        required: true
     },
     filters: {
         type: Array,
@@ -227,11 +228,11 @@ const onPageChanged = (page) => {
 
 <template>
     <!-- table container -->
-    <div class="bg-white dark:bg-gray-800 dark:text-white border border-slate-300 rounded-lg">
+    <div class="bg-white dark:bg-gray-800 dark:text-white border border-slate-300 rounded-lg overflow-hidden">
         <!-- search dan filter -->
         <div class="grid grid-cols-2">
             <!-- action -->
-            <div class="relative flex justify-start items-center gap-2 px-3">
+            <div class="relative flex justify-start items-center gap-2 px-4">
                 <button class="flex items-center border border-slate-300 p-2 rounded-lg hover:bg-slate-100"
                         v-if="selectedRows.length" @click="openAction = !openAction">
                     <IconDotsVertical class="size-6 hover:cursor-pointer text-sm"/>
@@ -259,7 +260,7 @@ const onPageChanged = (page) => {
             <!-- end action -->
 
             <!-- toggle columns, search and filter -->
-            <div class="relative flex justify-end items-center gap-2 px-3">
+            <div class="relative flex justify-end items-center gap-2 px-4">
                 <!-- search -->
                 <div class="rounded-tl rounded-tr p-2">
                     <label for="search" class="sr-only">Search</label>
@@ -390,6 +391,12 @@ const onPageChanged = (page) => {
         </div>
         <!-- end filter indicator to list all filtered name -->
 
+        <!-- header section -->
+        <div v-if="title" class="px-4 py-2 text-slate-700 font-bold border-t border-slate-300 bg-slate-100 dark:bg-gray-800 dark:text-white">
+            <h1>{{ title }}</h1>
+        </div>
+        <!-- end header section -->
+
         <!-- table -->
         <div class="overflow-x-auto border-t border-slate-300" v-if="items.data.length">
             <table class="w-full table-auto text-left text-sm">
@@ -404,7 +411,8 @@ const onPageChanged = (page) => {
                         class="bg-slate-100 dark:bg-gray-800 dark:text-white px-4 py-2 hover:cursor-pointer"
                         @click="column.sortable ? sortColumn(column.key) : ''">
                         {{ column.label }}
-                        <span v-if="sortKey === column.key" :class="{ 'text-red-500': sortOrder === 'desc', 'text-green-500': sortOrder === 'asc' }">
+                        <span v-if="sortKey === column.key"
+                              :class="{ 'text-red-500': sortOrder === 'desc', 'text-green-500': sortOrder === 'asc' }">
                             {{ sortOrder === 'asc' ? '↑' : '↓' }}
                         </span>
                     </th>
@@ -455,11 +463,11 @@ const onPageChanged = (page) => {
 
         <!-- pagination -->
         <div
-            class="border-t border-slate-300 dark:border-gray-300 flex justify-between items-center p-4 dark:text-white"
+            class="border-t border-slate-300 dark:border-gray-300 flex justify-between items-center px-4 py-2 dark:text-white"
             v-if="items.data.length">
-            <span class="mt-4 text-sm">Showing {{ items.from }} to {{ items.to }} of {{ items.total }} entries</span>
+            <span class="text-sm">Showing {{ items.from }} to {{ items.to }} of {{ items.total }} entries</span>
             <div
-                class="mt-4 rounded-lg text-sm grid grid-cols-2 divide-x-4 divide-slate-400 items-center justify-evenly">
+                class="rounded-lg text-sm grid grid-cols-2 divide-x-4 divide-slate-400 items-center justify-evenly">
                 <span class="">Showing</span>
                 <select v-model="pageOptionValue" @change="changePageOptions"
                         class="border-none focus:ring-0 dark:bg-gray-800">
@@ -471,7 +479,7 @@ const onPageChanged = (page) => {
             <FwbPagination :total-pages="items.last_page" v-model="currentPage" :per-page="limit"
                            :total-items="items.total"
                            v-on:page-changed="onPageChanged" :enable-first-and-last-buttons="true"
-                           class="text-sm mt-4 justify-center">
+                           class="text-sm justify-center">
             </FwbPagination>
         </div>
         <!-- end pagination -->
