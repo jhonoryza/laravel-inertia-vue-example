@@ -387,11 +387,11 @@ const onPageChanged = (page) => {
                     </th>
                     <th v-for="column in visibleColumns" :key="column.key"
                         class="bg-slate-100 dark:bg-gray-800 dark:text-white px-4 py-2 hover:cursor-pointer"
-                        @click="sortColumn(column.key)">
+                        @click="column.sortable ? sortColumn(column.key) : ''">
                         {{ column.label }}
-                        <span v-if="sortKey === column.key">
-                                {{ sortOrder === 'asc' ? '↑' : '↓' }}
-                            </span>
+                        <span v-if="sortKey === column.key" :class="{ 'text-red-500': sortOrder === 'desc', 'text-green-500': sortOrder === 'asc' }">
+                            {{ sortOrder === 'asc' ? '↑' : '↓' }}
+                        </span>
                     </th>
                     <th class="bg-slate-100 dark:bg-gray-800 dark:text-white px-4 py-2">Action</th>
                 </tr>

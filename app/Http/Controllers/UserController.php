@@ -11,7 +11,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class UserController extends Controller
 {
-    protected $pageOptions = [5, 10, 25, 50, 100];
+    protected array $pageOptions = [5, 10, 25, 50, 100];
 
     public function index()
     {
@@ -47,10 +47,10 @@ class UserController extends Controller
             'limit' => $users->perPage(),
             'allIds' => inertia()->lazy(fn () => $builder->pluck('id')),
             'columns' => [
-                ['key' => 'id', 'label' => 'ID', 'visible' => true],
-                ['key' => 'name', 'label' => 'Name', 'visible' => true],
-                ['key' => 'email', 'label' => 'Email', 'visible' => true],
-                ['key' => 'created_at', 'label' => 'Created At', 'visible' => true],
+                ['key' => 'id', 'label' => 'ID', 'visible' => true, 'sortable' => true],
+                ['key' => 'name', 'label' => 'Name', 'visible' => true, 'sortable' => true],
+                ['key' => 'email', 'label' => 'Email', 'visible' => true, 'sortable' => true],
+                ['key' => 'created_at', 'label' => 'Created At', 'visible' => true, 'sortable' => false],
             ],
             'filters' => ['name', 'email', 'search']
         ]);
