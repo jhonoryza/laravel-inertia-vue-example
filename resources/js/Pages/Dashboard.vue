@@ -52,7 +52,7 @@ const props = defineProps({
                 <!-- bulk action slot -->
                 <template #bulkaction="{ selectedRows, confirmDelete, route, module }">
                     <button type="button"
-                            class="text-sm text-skin-error hover:bg-red-100 rounded-lg flex gap-2 justify-start items-center p-2 w-full"
+                            class="text-sm hover:bg-red-100 dark:hover:bg-gray-600 rounded-lg flex gap-2 justify-start items-center p-2 w-full"
                             @click="() => {
                                         const posts = { ids: selectedRows };
                                         confirmDelete(route(`${module}.bulk-delete`, posts));
@@ -62,6 +62,12 @@ const props = defineProps({
                     </button>
                 </template>
                 <!-- end bulk action slot -->
+
+                <!-- more action slot -->
+                <template #moreaction>
+
+                </template>
+                <!-- end more action slot -->
 
                 <!-- row action slot -->
                 <template #rowaction="{ itemId, confirmDelete, route, module }">

@@ -225,12 +225,12 @@ const onPageChanged = (page) => {
 
 <template>
     <!-- table container -->
-    <div class="bg-white dark:bg-gray-800 dark:text-white border border-skin-neutral-5 rounded-lg">
+    <div class="bg-white dark:bg-gray-800 dark:text-white border border-slate-300 rounded-lg">
         <!-- search dan filter -->
         <div class="grid grid-cols-2">
             <!-- action -->
             <div class="relative flex justify-start items-center gap-2 px-3">
-                <button class="flex items-center border border-skin-neutral-6 p-2 rounded-lg hover:bg-skin-neutral-2"
+                <button class="flex items-center border border-slate-300 p-2 rounded-lg hover:bg-slate-100"
                         v-if="selectedRows.length" @click="openAction = !openAction">
                     <IconDotsVertical class="size-6 hover:cursor-pointer text-sm"/>
                     <span class="text-sm font-semibold">Action</span>
@@ -240,9 +240,9 @@ const onPageChanged = (page) => {
                             enter-from-class="opacity-0"
                             enter-to-class="opacity-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
                     <div v-if="openAction" v-click-away="() => openAction = false"
-                         class="z-10 bg-white dark:bg-gray-800 dark:text-white w-1/4 absolute top-[85%] border border-skin-neutral-5 rounded-lg p-1">
+                         class="z-10 bg-white dark:bg-gray-800 dark:text-white w-1/4 absolute top-[85%] border border-slate-300 rounded-lg p-1">
 
-                        <div class="flex flex-col text-skin-neutral-12 justify-start items-start">
+                        <div class="flex flex-col text-slate-700 justify-start items-start">
                             <template v-if="$slots.bulkaction">
                                 <slot name="bulkaction" :selectedRows="selectedRows" :confirmDelete="confirmDelete"
                                       :route="route" :module="props.module"></slot>
@@ -250,6 +250,9 @@ const onPageChanged = (page) => {
                         </div>
                     </div>
                 </Transition>
+                <template v-if="$slots.moreaction">
+                    <slot name="moreaction"></slot>
+                </template>
             </div>
             <!-- end action -->
 
@@ -280,7 +283,7 @@ const onPageChanged = (page) => {
                     <IconFilterFilled
                         class="size-6 hover:cursor-pointer text-gray-600 hover:text-gray-400 dark:hover:text-gray-300 dark:text-gray-100"
                         @click="openFilter = !openFilter"/>
-                    <span class="absolute -top-2 -right-2 bg-skin-neutral-5 px-1 text-xs rounded-3xl">
+                    <span class="absolute -top-2 -right-2 bg-slate-100 px-1 text-xs rounded-3xl">
                         {{ filterCount }}
                     </span>
                 </div>
@@ -289,9 +292,9 @@ const onPageChanged = (page) => {
                             enter-from-class="opacity-0"
                             enter-to-class="opacity-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
                     <div v-if="openFilter" v-click-away="() => openFilter = false"
-                         class="z-10 bg-white dark:bg-gray-800 dark:text-white w-1/2 absolute top-[85%] border border-skin-neutral-5 rounded-lg p-2">
+                         class="z-10 bg-white dark:bg-gray-800 dark:text-white w-1/2 absolute top-[85%] border border-slate-300 rounded-lg p-2">
 
-                        <div class="flex flex-col flex-wrap gap-2 text-skin-neutral-12">
+                        <div class="flex flex-col flex-wrap gap-2 text-slate-700">
                             <div class="flex justify-between">
                                 <span class="font-semibold">Filter</span>
                                 <button type="button" class="text-red-400 font-semibold hover:text-red-500 text-sm"
@@ -317,15 +320,15 @@ const onPageChanged = (page) => {
                             enter-from-class="opacity-0"
                             enter-to-class="opacity-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
                     <div v-if="openToggleColumn" v-click-away="() => openToggleColumn = false"
-                         class="z-10 bg-white dark:bg-gray-800 dark:text-white w-1/2 absolute top-[85%] border border-skin-neutral-5 rounded-lg p-4">
+                         class="z-10 bg-white dark:bg-gray-800 dark:text-white w-1/2 absolute top-[85%] border border-slate-300 rounded-lg p-4">
 
-                        <div class="flex flex-col flex-wrap gap-4 text-skin-neutral-12 text-sm">
+                        <div class="flex flex-col flex-wrap gap-4 text-slate-500 text-sm">
                             <span class="font-semibold">Toggle Column</span>
                             <div class="flex flex-col gap-2 justify-between">
                                 <div v-for="column in columns" :key="column.key" class="flex gap-3 items-center">
                                     <Checkbox :id="column.key" v-model="column.visible"
                                               @change="toggleColumn(column.key)"
-                                              class="text-skin-neutral-12 focus:ring-0"/>
+                                              class="text-slate-500 focus:ring-0"/>
                                     <label class="block font-medium">{{ column.label }}</label>
                                 </div>
                             </div>
@@ -383,7 +386,7 @@ const onPageChanged = (page) => {
                 <tr>
                     <th class="bg-slate-100 dark:bg-gray-800 dark:text-white px-4 py-2">
                         <input type="checkbox" id="selectAll" v-model="selectAll" @change="toggleSelectAll"
-                               class="text-skin-neutral-12 h-4 w-4 rounded focus:ring-0"/>
+                               class="text-slate-500 h-4 w-4 rounded focus:ring-0"/>
                     </th>
                     <th v-for="column in visibleColumns" :key="column.key"
                         class="bg-slate-100 dark:bg-gray-800 dark:text-white px-4 py-2 hover:cursor-pointer"
@@ -400,13 +403,13 @@ const onPageChanged = (page) => {
 
                 <!-- table body -->
                 <tbody class="bg-white dark:bg-gray-800 dark:text-white">
-                <tr class="border-t border-slate-300 hover:bg-skin-neutral-3" v-for="item in items.data"
+                <tr class="border-t border-slate-300" v-for="item in items.data"
                     :key="item.id">
 
                     <!-- checkbox -->
                     <td class="whitespace-nowrap px-4 py-2 font-medium">
                         <input type="checkbox" :id="item.id" v-model="selectedRows" :value="item.id"
-                               class="text-skin-neutral-12 h-4 w-4 rounded focus:ring-0"/>
+                               class="text-slate-500 h-4 w-4 rounded focus:ring-0"/>
                     </td>
 
                     <!-- columns item -->
