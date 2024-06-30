@@ -52,6 +52,7 @@ class UserController extends Controller
                 ['key' => 'email', 'label' => 'Email', 'visible' => true],
                 ['key' => 'created_at', 'label' => 'Created At', 'visible' => true],
             ],
+            'filters' => ['name', 'email', 'search']
         ]);
     }
 

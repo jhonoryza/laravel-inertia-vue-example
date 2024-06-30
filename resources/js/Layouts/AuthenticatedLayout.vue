@@ -1,36 +1,14 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
-import { IconMoon, IconSun } from '@tabler/icons-vue';
+import ToggleDarkMode from "@/Components/Liv/ToggleDarkMode.vue";
 
 const showingNavigationDropdown = ref(false);
-
-const colorMode = ref(localStorage.getItem('color-mode') || 'light');
-
-onMounted(() => {
-    const rootElement = document.documentElement;
-    if (colorMode.value === 'light') {
-        rootElement.classList.remove('dark');
-    } else {
-        rootElement.classList.add('dark');
-    }
-});
-
-const toogleColorMode = () => {
-    colorMode.value = colorMode.value === 'light' ? 'dark' : 'light';
-    localStorage.setItem('color-mode', colorMode.value);
-    const rootElement = document.documentElement;
-    if (colorMode.value === 'light') {
-        rootElement.classList.remove('dark');
-    } else {
-        rootElement.classList.add('dark');
-    }
-};
 
 </script>
 
@@ -60,14 +38,7 @@ const toogleColorMode = () => {
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ms-6">
-                            <!-- toggle dark mode -->
-                            <button
-                                class="inline-flex items-center p-2 focus:outline-none rounded-md"
-                                @click="toogleColorMode"
-                            >
-                                <IconSun class="size-4 " v-if="colorMode === 'light'" />
-                                <IconMoon class="size-4 stroke-white" v-else />
-                            </button>
+                            <ToggleDarkMode />
 
                             <!-- Settings Dropdown -->
                             <div class="ms-3 relative">
