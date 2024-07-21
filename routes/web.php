@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +22,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
     Route::delete('users/bulk-delete', [UserController::class, 'bulkDestroy'])->name('users.bulk-delete');
     Route::resource('users', UserController::class);
+    Route::resource('settings', SettingController::class);
 });
 
 Route::middleware('auth')->group(function () {

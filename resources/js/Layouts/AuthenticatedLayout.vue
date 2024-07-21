@@ -45,6 +45,12 @@ const showingNavigationDropdown = ref(false);
                 >
                   User
                 </NavLink>
+                <NavLink
+                  :href="route('settings.index')"
+                  :active="route().current('settings.index')"
+                >
+                  Setting
+                </NavLink>
               </div>
             </div>
 
