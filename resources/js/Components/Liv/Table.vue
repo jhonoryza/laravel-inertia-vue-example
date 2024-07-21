@@ -239,7 +239,7 @@ const onPageChanged = (page) => {
     class="mt-4 bg-white dark:bg-gray-800 dark:text-white border border-slate-300 rounded-lg overflow-hidden"
   >
     <!-- action, search dan filter -->
-    <div class="grid grid-cols-2">
+    <div class="flex items-center justify-between">
       <!-- action -->
       <div class="relative flex justify-start items-center gap-2 px-4">
         <button
@@ -261,7 +261,7 @@ const onPageChanged = (page) => {
           <div
             v-if="openAction"
             v-click-away="() => (openAction = false)"
-            class="z-10 bg-white dark:bg-gray-800 dark:text-white w-1/4 absolute top-[85%] border border-slate-300 rounded-lg p-1"
+            class="z-10 bg-white dark:bg-gray-800 dark:text-white w-40 absolute top-11 border border-slate-300 rounded-lg p-1"
           >
             <div class="flex flex-col text-slate-700 justify-start items-start">
               <template v-if="$slots.bulkaction">
