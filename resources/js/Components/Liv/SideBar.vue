@@ -52,7 +52,9 @@ const menuItems = ref([
           <SideBarMenuItem :item="item" />
         </li>
       </ul>
-      <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
+      <div
+        class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600 xl:hidden"
+      >
         <div class="px-4">
           <div class="font-medium text-base text-gray-800 dark:text-gray-200">
             {{ $page.props.auth.user.name }}
