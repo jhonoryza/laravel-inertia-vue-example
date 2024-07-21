@@ -3,11 +3,11 @@ import { ref } from "vue";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
-import NavLink from "@/Components/NavLink.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import { Link } from "@inertiajs/vue3";
 import ToggleDarkMode from "@/Components/Liv/ToggleDarkMode.vue";
 import AppToast from "@/Components/Liv/AppToast.vue";
+import SideBar from "@/Components/Liv/SideBar.vue";
 
 const showingNavigationDropdown = ref(false);
 </script>
@@ -15,11 +15,9 @@ const showingNavigationDropdown = ref(false);
 <template>
   <div>
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-      <nav
-        class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700"
-      >
+      <nav class="bg-white dark:bg-gray-800 dark:border-gray-700">
         <!-- Primary Navigation Menu -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="px-2 mx-auto">
           <div class="flex justify-between h-16">
             <div class="flex">
               <!-- Logo -->
@@ -29,28 +27,6 @@ const showingNavigationDropdown = ref(false);
                     class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200"
                   />
                 </Link>
-              </div>
-
-              <!-- Navigation Links -->
-              <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                <NavLink
-                  :href="route('dashboard')"
-                  :active="route().current('dashboard')"
-                >
-                  Dashboard
-                </NavLink>
-                <NavLink
-                  :href="route('users.index')"
-                  :active="route().current('users.index')"
-                >
-                  User
-                </NavLink>
-                <NavLink
-                  :href="route('settings.index')"
-                  :active="route().current('settings.index')"
-                >
-                  Setting
-                </NavLink>
               </div>
             </div>
 
@@ -184,18 +160,18 @@ const showingNavigationDropdown = ref(false);
         </div>
       </nav>
 
-      <!-- Page Heading -->
-      <header class="bg-white dark:bg-gray-800 shadow" v-if="$slots.header">
-        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <slot name="header" />
-        </div>
-      </header>
-
       <AppToast />
       <!-- Page Content -->
-      <main>
-        <slot />
-      </main>
+      <div class="grid grid-cols-12">
+        <div class="col-span-2 relative">
+          <SideBar />
+        </div>
+        <div class="col-span-10">
+          <main>
+            <slot />
+          </main>
+        </div>
+      </div>
     </div>
   </div>
 </template>

@@ -243,7 +243,7 @@ const onPageChanged = (page) => {
       <!-- action -->
       <div class="relative flex justify-start items-center gap-2 px-4">
         <button
-          class="flex items-center border border-slate-300 p-2 rounded-lg hover:bg-slate-100"
+          class="flex items-center border border-slate-300 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-gray-700"
           v-if="selectedRows.length"
           @click="openAction = !openAction"
         >
@@ -314,7 +314,7 @@ const onPageChanged = (page) => {
         <!-- custom filter -->
         <div class="relative" v-if="props.filters.length > 1">
           <IconFilterFilled
-            class="size-6 hover:cursor-pointer text-gray-600 hover:text-gray-400 dark:hover:text-gray-300 dark:text-gray-100"
+            class="size-6 hover:cursor-pointer text-gray-600 hover:text-gray-400 dark:hover:text-gray-300 dark:text-gray-400"
             @click="openFilter = !openFilter"
           />
           <span
@@ -358,7 +358,7 @@ const onPageChanged = (page) => {
 
         <!-- toggle columns -->
         <IconTableColumn
-          class="size-6 hover:cursor-pointer text-gray-600 hover:text-gray-400 dark:hover:text-gray-300 dark:text-gray-100"
+          class="size-6 hover:cursor-pointer text-gray-600 hover:text-gray-400 dark:hover:text-gray-300 dark:text-gray-400"
           @click="openToggleColumn = !openToggleColumn"
         />
         <Transition

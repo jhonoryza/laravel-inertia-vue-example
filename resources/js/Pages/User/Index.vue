@@ -23,14 +23,6 @@ const props = defineProps({
   <Head title="List User" />
 
   <AuthenticatedLayout>
-    <template #header>
-      <h2
-        class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight"
-      >
-        List User
-      </h2>
-    </template>
-
     <Container>
       <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
         <section class="max-w-screen-xl">
@@ -70,7 +62,7 @@ const props = defineProps({
             >
               <button
                 type="button"
-                class="text-sm hover:bg-slate-100 dark:hover:bg-gray-600 rounded-lg flex gap-2 justify-start items-center p-2 w-full"
+                class="text-sm hover:bg-slate-100 dark:hover:bg-gray-700 dark:text-white rounded-lg flex gap-2 justify-start items-center p-2 w-full"
                 @click="
                   () => {
                     const ids = { ids: selectedRows };
@@ -96,7 +88,7 @@ const props = defineProps({
               <!-- create record -->
               <button
                 type="button"
-                class="flex items-center hover:cursor-pointer text-gray-600 hover:text-gray-400 dark:hover:text-gray-300 dark:text-gray-100"
+                class="flex items-center hover:cursor-pointer text-gray-600 hover:text-gray-400 dark:hover:text-gray-300 dark:text-gray-400"
                 @click="$inertia.get(route(`users.create`))"
               >
                 <IconFilePlus class="size-6" />
