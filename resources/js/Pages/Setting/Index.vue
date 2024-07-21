@@ -13,33 +13,9 @@ import InputText from "@/Components/Liv/InputText.vue";
 import Container from "@/Components/Liv/Container.vue";
 
 const props = defineProps({
-  settings: {
+  table: {
     type: Object,
     default: () => {},
-  },
-  pageOptions: {
-    type: Array,
-    default: () => [],
-  },
-  limit: {
-    type: Number,
-    default: 10,
-  },
-  allIds: {
-    type: Array,
-    default: () => [],
-  },
-  columns: {
-    type: Array,
-    default: () => [],
-  },
-  filters: {
-    type: Array,
-    default: () => ["search"],
-  },
-  defaultSort: {
-    type: String,
-    default: "-id",
   },
 });
 </script>
@@ -79,15 +55,15 @@ const props = defineProps({
             </div>
           </header>
           <Table
-            :items="settings"
-            :page-options="pageOptions"
-            :limit="limit"
-            :all-ids="allIds"
-            :columns="columns"
+            :items="table.settings"
+            :page-options="table.pageOptions"
+            :limit="table.limit"
+            :all-ids="table.allIds"
+            :columns="table.columns"
+            :filters="table.filters"
+            :default-sort="table.defaultSort"
             module="settings"
-            :filters="filters"
             title="Settings Table"
-            :default-sort="defaultSort"
           >
             <!-- bulk action slot -->
             <template

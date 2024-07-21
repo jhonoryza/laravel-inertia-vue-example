@@ -48,18 +48,20 @@ class UserController extends Controller
             ->withQueryString();
 
         return Inertia::render('User/Index', [
-            'users' => $users,
-            'pageOptions' => $this->pageOptions,
-            'limit' => $users->perPage(),
-            'allIds' => inertia()->lazy(fn () => $builder->pluck('id')),
-            'columns' => [
-                ['key' => 'id', 'label' => 'ID', 'visible' => true, 'sortable' => true],
-                ['key' => 'name', 'label' => 'Name', 'visible' => true, 'sortable' => true],
-                ['key' => 'email', 'label' => 'Email', 'visible' => true, 'sortable' => true],
-                ['key' => 'created_at', 'label' => 'Created At', 'visible' => true, 'sortable' => true],
+            'table' => [
+                'users' => $users,
+                'pageOptions' => $this->pageOptions,
+                'limit' => $users->perPage(),
+                'allIds' => $builder->pluck('id'),
+                'columns' => [
+                    ['key' => 'id', 'label' => 'ID', 'visible' => true, 'sortable' => true],
+                    ['key' => 'name', 'label' => 'Name', 'visible' => true, 'sortable' => true],
+                    ['key' => 'email', 'label' => 'Email', 'visible' => true, 'sortable' => true],
+                    ['key' => 'created_at', 'label' => 'Created At', 'visible' => true, 'sortable' => true],
+                ],
+                'filters' => ['name', 'email', 'search'],
+                'defaultSort' => '-created_at',
             ],
-            'filters' => ['name', 'email', 'search'],
-            'defaultSort' => '-created_at',
         ]);
     }
 

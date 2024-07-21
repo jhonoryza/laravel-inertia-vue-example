@@ -48,18 +48,20 @@ class SettingController extends Controller
             ->withQueryString();
 
         return Inertia::render('Setting/Index', [
-            'settings' => $data,
-            'pageOptions' => $this->pageOptions,
-            'limit' => $data->perPage(),
-            'allIds' => inertia()->lazy(fn () => $builder->pluck('id')),
-            'columns' => [
-                ['key' => 'id', 'label' => 'ID', 'visible' => true, 'sortable' => true],
-                ['key' => 'key', 'label' => 'Key', 'visible' => true, 'sortable' => true],
-                ['key' => 'value', 'label' => 'Value', 'visible' => true, 'sortable' => true],
-                ['key' => 'created_at', 'label' => 'Created At', 'visible' => true, 'sortable' => true],
+            'table' => [
+                'settings' => $data,
+                'pageOptions' => $this->pageOptions,
+                'limit' => $data->perPage(),
+                'allIds' => inertia()->lazy(fn () => $builder->pluck('id')),
+                'columns' => [
+                    ['key' => 'id', 'label' => 'ID', 'visible' => true, 'sortable' => true],
+                    ['key' => 'key', 'label' => 'Key', 'visible' => true, 'sortable' => true],
+                    ['key' => 'value', 'label' => 'Value', 'visible' => true, 'sortable' => true],
+                    ['key' => 'created_at', 'label' => 'Created At', 'visible' => true, 'sortable' => true],
+                ],
+                'filters' => ['key', 'value', 'search'],
+                'defaultSort' => '-created_at',
             ],
-            'filters' => ['key', 'value', 'search'],
-            'defaultSort' => '-created_at',
         ]);
     }
 

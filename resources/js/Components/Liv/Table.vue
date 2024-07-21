@@ -157,23 +157,14 @@ const toggleSelectAll = () => {
 };
 
 const selectAllRows = () => {
-  router.reload({ only: ["allIds"], preserveState: true });
+  selectAll.value = true;
+  selectedRows.value = props.allIds;
 };
 
 const clearSelectedRows = () => {
   selectedRows.value = [];
   selectAll.value = false;
 };
-
-watch(
-  () => props.allIds,
-  (value) => {
-    if (value.length > 0) {
-      selectedRows.value = value;
-      selectAll.value = true;
-    }
-  },
-);
 
 // sorting handler section
 const defaultSorts = props.defaultSort.split("-");
