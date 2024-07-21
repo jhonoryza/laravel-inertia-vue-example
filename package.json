@@ -12,13 +12,17 @@
         "@vitejs/plugin-vue": "^5.0.0",
         "autoprefixer": "^10.4.12",
         "axios": "^1.6.4",
+        "eslint": "^8.57.0",
         "flowbite": "^2.4.1",
         "flowbite-vue": "^0.1.5",
         "laravel-vite-plugin": "^1.0",
         "postcss": "^8.4.31",
+        "prettier": "^3.3.3",
+        "prettier-eslint": "^16.3.0",
         "tailwindcss": "^3.2.1",
         "vite": "^5.0",
         "vue": "^3.4.0",
+        "vue-eslint-parser": "^8.3.0",
         "vue3-click-away": "^1.2.4"
     }
 }

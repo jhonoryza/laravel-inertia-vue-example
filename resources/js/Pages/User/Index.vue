@@ -1,0 +1,199 @@
+<script setup>
+import Table from "@/Components/Liv/Table.vue";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head } from "@inertiajs/vue3";
+import {
+  IconTrash,
+  IconEdit,
+  IconFilePlus,
+  IconEye,
+  IconChevronRight,
+} from "@tabler/icons-vue";
+import InputText from "@/Components/Liv/InputText.vue";
+import Container from "@/Components/Liv/Container.vue";
+
+const props = defineProps({
+  users: {
+    type: Object,
+    default: () => {},
+  },
+  pageOptions: {
+    type: Array,
+    default: () => [],
+  },
+  limit: {
+    type: Number,
+    default: 10,
+  },
+  allIds: {
+    type: Array,
+    default: () => [],
+  },
+  columns: {
+    type: Array,
+    default: () => [],
+  },
+  filters: {
+    type: Array,
+    default: () => ["search"],
+  },
+  defaultSort: {
+    type: String,
+    default: "-id",
+  },
+});
+</script>
+
+<template>
+  <Head title="List User" />
+
+  <AuthenticatedLayout>
+    <template #header>
+      <h2
+        class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight"
+      >
+        List User
+      </h2>
+    </template>
+
+    <Container>
+      <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+        <section class="max-w-screen-xl">
+          <header>
+            <div
+              class="flex gap-2 items-center text-sm font-bold text-zinc-600 dark:text-zinc-100"
+            >
+              <h2
+                class="hover:text-zinc-900 hover:cursor-pointer"
+                @click="$inertia.get(route('dashboard'))"
+              >
+                Home
+              </h2>
+              <IconChevronRight class="size-4" />
+              <h2
+                class="hover:text-zinc-900 hover:cursor-pointer"
+                @click="$inertia.get(route('users.index'))"
+              >
+                Users
+              </h2>
+            </div>
+          </header>
+          <Table
+            :items="users"
+            :page-options="pageOptions"
+            :limit="limit"
+            :all-ids="allIds"
+            :columns="columns"
+            module="users"
+            :filters="filters"
+            title="Users Table"
+            :default-sort="defaultSort"
+          >
+            <!-- bulk action slot -->
+            <template
+              #bulkaction="{ selectedRows, confirmDelete, route, module }"
+            >
+              <button
+                type="button"
+                class="text-sm hover:bg-slate-100 dark:hover:bg-gray-600 rounded-lg flex gap-2 justify-start items-center p-2 w-full"
+                @click="
+                  () => {
+                    const ids = { ids: selectedRows };
+                    confirmDelete(
+                      route(`${module}.bulk-delete`, ids),
+                      `Delete item id: ${selectedRows}`,
+                    );
+                  }
+                "
+              >
+                <IconTrash class="size-4" />
+                <span>Bulk Delete</span>
+              </button>
+            </template>
+            <!-- end bulk action slot -->
+
+            <!-- more action slot -->
+            <template #moreaction> </template>
+            <!-- end more action slot -->
+
+            <!-- create action slot -->
+            <template #createaction>
+              <!-- create record -->
+              <button
+                type="button"
+                class="flex items-center hover:cursor-pointer text-gray-600 hover:text-gray-400 dark:hover:text-gray-300 dark:text-gray-100"
+                @click="$inertia.get(route(`users.create`))"
+              >
+                <IconFilePlus class="size-6" />
+                <span>New</span>
+              </button>
+              <!-- end create record -->
+            </template>
+            <!-- end create action slot -->
+
+            <!-- row action slot -->
+            <template #rowaction="{ itemId, confirmDelete, route, module }">
+              <!-- view item -->
+              <div class="inline-block mr-2">
+                <button
+                  type="button"
+                  class="flex gap-1 justify-center items-center min-h-8 hover:text-slate-400"
+                  @click="$inertia.visit(route(`${module}.show`, itemId))"
+                >
+                  <IconEye class="size-4" />
+                  View
+                </button>
+              </div>
+              <!-- edit item -->
+              <div class="inline-block mr-2">
+                <button
+                  type="button"
+                  class="flex gap-1 justify-center items-center min-h-8 hover:text-yellow-400"
+                  @click="$inertia.visit(route(`${module}.edit`, itemId))"
+                >
+                  <IconEdit class="size-4" />
+                  Edit
+                </button>
+              </div>
+
+              <!-- delete item -->
+              <div class="inline-block mr-2">
+                <button
+                  type="button"
+                  class="flex gap-1 justify-center items-center min-h-8 hover:text-red-400"
+                  @click="
+                    confirmDelete(
+                      route(`${module}.destroy`, itemId),
+                      `Delete item id ${itemId}`,
+                    )
+                  "
+                >
+                  <IconTrash class="size-4" />
+                  Delete
+                </button>
+              </div>
+            </template>
+            <!-- end row action slot -->
+
+            <!-- filter slot -->
+            <template #filter="{ filter }">
+              <label
+                class="block font-medium text-sm dark:text-gray-100"
+                for="name"
+                >Name</label
+              >
+              <InputText v-model="filter.name" />
+              <label
+                class="block font-medium text-sm dark:text-gray-100"
+                for="email"
+                >Email</label
+              >
+              <InputText v-model="filter.email" />
+            </template>
+            <!-- end filter slot -->
+          </Table>
+        </section>
+      </div>
+    </Container>
+  </AuthenticatedLayout>
+</template>

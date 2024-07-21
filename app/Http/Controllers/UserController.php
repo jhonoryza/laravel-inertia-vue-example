@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -17,9 +18,10 @@ class UserController extends Controller
     {
         $limit = request('limit', 10);
         $page = request('page', 1);
+
         $builder = QueryBuilder::for(User::class)
-            ->defaultSort('-id')
-            ->allowedSorts(['id', 'name', 'email'])
+            ->defaultSort('-created_at')
+            ->allowedSorts(['id', 'name', 'email', 'created_at'])
             ->allowedFilters([
                 'name',
                 'email',
@@ -30,18 +32,22 @@ class UserController extends Controller
                     });
                 }),
             ]);
-        $users = $builder
+
+        /** @var Collection $paginatedUsers */
+        $paginatedUsers = $builder
             ->clone()
-            ->paginate(perPage: $limit, page: $page)
+            ->paginate(perPage: $limit, page: $page);
+
+        $users = $paginatedUsers
             ->through(fn ($user) => [
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-                'created_at' => $user->created_at->format('d/m/Y H:i').'h',
+                'created_at' => $user->created_at->format('d F Y'),
             ])
             ->withQueryString();
 
-        return Inertia::render('Dashboard', [
+        return Inertia::render('User/Index', [
             'users' => $users,
             'pageOptions' => $this->pageOptions,
             'limit' => $users->perPage(),
@@ -50,9 +56,10 @@ class UserController extends Controller
                 ['key' => 'id', 'label' => 'ID', 'visible' => true, 'sortable' => true],
                 ['key' => 'name', 'label' => 'Name', 'visible' => true, 'sortable' => true],
                 ['key' => 'email', 'label' => 'Email', 'visible' => true, 'sortable' => true],
-                ['key' => 'created_at', 'label' => 'Created At', 'visible' => true, 'sortable' => false],
+                ['key' => 'created_at', 'label' => 'Created At', 'visible' => true, 'sortable' => true],
             ],
-            'filters' => ['name', 'email', 'search']
+            'filters' => ['name', 'email', 'search'],
+            'defaultSort' => '-created_at',
         ]);
     }
 
@@ -61,7 +68,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('User/Create');
     }
 
     /**
@@ -69,7 +76,19 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|max:255|confirmed',
+        ]);
+        $user = User::query()->create($data);
+
+        session()->flash('message', [
+            'message' => "Buat user {$user->id} berhasil.",
+            'type' => 'success',
+        ]);
+
+        return redirect()->route('users.index');
     }
 
     /**
@@ -77,7 +96,14 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        return Inertia::render('User/Show', [
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'created_at' => $user->created_at->format('d/m/Y H:i'),
+            ],
+        ]);
     }
 
     /**
@@ -85,7 +111,14 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        return Inertia::render('User/Edit', [
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'created_at' => $user->created_at->format('d/m/Y H:i'),
+            ],
+        ]);
     }
 
     /**
@@ -93,7 +126,25 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,id,'.$user->id,
+            'password' => 'nullable|string|min:8|max:255|confirmed',
+        ]);
+
+        if (empty($data['password'])) {
+            unset($data['password']);
+        } else {
+            $data['password'] = bcrypt($data['password']);
+        }
+        $user->fill($data)->save();
+
+        session()->flash('message', [
+            'message' => 'Update user berhasil.',
+            'type' => 'success',
+        ]);
+
+        return redirect()->back();
     }
 
     /**
@@ -101,6 +152,30 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $user->delete();
+
+        session()->flash('message', [
+            'message' => "User id {$user->id} berhasil dihapus.",
+            'type' => 'success',
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function bulkDestroy(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'required|exists:users,id',
+        ]);
+        User::query()->whereIn('id', $request->ids)->delete();
+
+        $idsString = collect($request->ids)->implode(',');
+        session()->flash('message', [
+            'message' => "User id {$idsString} berhasil dihapus.",
+            'type' => 'success',
+        ]);
+
+        return redirect()->back();
     }
 }
