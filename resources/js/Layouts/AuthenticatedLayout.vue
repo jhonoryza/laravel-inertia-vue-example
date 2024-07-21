@@ -3,7 +3,6 @@ import { ref } from "vue";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
-import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import { Link } from "@inertiajs/vue3";
 import ToggleDarkMode from "@/Components/Liv/ToggleDarkMode.vue";
 import AppToast from "@/Components/Liv/AppToast.vue";
@@ -30,7 +29,7 @@ const showingNavigationDropdown = ref(false);
               </div>
             </div>
 
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
+            <div class="hidden xl:flex sm:items-center sm:ms-6">
               <ToggleDarkMode />
 
               <!-- Settings Dropdown -->
@@ -77,7 +76,7 @@ const showingNavigationDropdown = ref(false);
             </div>
 
             <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
+            <div class="-me-2 flex items-center xl:hidden">
               <button
                 @click="showingNavigationDropdown = !showingNavigationDropdown"
                 class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out"
@@ -120,53 +119,19 @@ const showingNavigationDropdown = ref(false);
             block: showingNavigationDropdown,
             hidden: !showingNavigationDropdown,
           }"
-          class="sm:hidden"
+          class="xl:hidden relative"
         >
-          <div class="pt-2 pb-3 space-y-1">
-            <ResponsiveNavLink
-              :href="route('dashboard')"
-              :active="route().current('dashboard')"
-            >
-              Dashboard
-            </ResponsiveNavLink>
-          </div>
-
-          <!-- Responsive Settings Options -->
-          <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
-            <div class="px-4">
-              <div
-                class="font-medium text-base text-gray-800 dark:text-gray-200"
-              >
-                {{ $page.props.auth.user.name }}
-              </div>
-              <div class="font-medium text-sm text-gray-500">
-                {{ $page.props.auth.user.email }}
-              </div>
-            </div>
-
-            <div class="mt-3 space-y-1">
-              <ResponsiveNavLink :href="route('profile.edit')">
-                Profile
-              </ResponsiveNavLink>
-              <ResponsiveNavLink
-                :href="route('logout')"
-                method="post"
-                as="button"
-              >
-                Log Out
-              </ResponsiveNavLink>
-            </div>
-          </div>
+          <SideBar />
         </div>
       </nav>
 
       <AppToast />
       <!-- Page Content -->
       <div class="grid grid-cols-12">
-        <div class="col-span-2 relative">
+        <div class="col-span-2 relative hidden xl:block">
           <SideBar />
         </div>
-        <div class="col-span-10">
+        <div class="col-span-12 xl:col-span-10">
           <main>
             <slot />
           </main>
