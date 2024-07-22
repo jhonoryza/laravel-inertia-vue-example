@@ -492,7 +492,7 @@ const onPageChanged = (page) => {
               "
               @click="column.sortable ? sortColumn(column.key) : ''"
             >
-              {{ column.label }}
+              <span> {{ column.label }}</span>
               <span
                 v-if="sortKey === column.key"
                 :class="{
@@ -572,18 +572,17 @@ const onPageChanged = (page) => {
       class="border-t border-slate-300 dark:border-gray-300 flex justify-between items-center px-4 py-2 dark:text-white"
       v-if="items.data.length"
     >
-      <span class="text-sm"
-        >Showing {{ items.from }} to {{ items.to }} of
-        {{ items.total }} entries</span
-      >
+      <span class="text-sm hidden md:block">
+        Showing {{ items.from }} to {{ items.to }} of {{ items.total }} entries
+      </span>
       <div
         class="rounded-lg text-sm grid grid-cols-2 divide-x-4 divide-slate-400 items-center justify-evenly"
       >
-        <span class="">Showing</span>
+        <span class="hidden sm:block">Showing</span>
         <select
           v-model="pageOptionValue"
           @change="changePageOptions"
-          class="border-none focus:ring-0 dark:bg-gray-800"
+          class="hidden sm:block border-none focus:ring-0 dark:bg-gray-800"
         >
           <option v-for="option in pageOptions" :key="option" :value="option">
             <span class="text-sm">{{ option }}</span>
