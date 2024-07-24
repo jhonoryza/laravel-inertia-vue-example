@@ -1,4 +1,4 @@
-import debounce from "@/Utils/debounce";
+import debounce from "./debounce";
 import { computed, reactive, ref, watchEffect } from "vue";
 import { router } from "@inertiajs/vue3";
 

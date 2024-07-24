@@ -11,7 +11,7 @@ import Checkbox from "./Checkbox.vue";
 import InputText from "./InputText.vue";
 import Loading from "./Loading.vue";
 import Pagination from "./Pagination.vue";
-import { useTableLogic } from "@/Utils/table-logic";
+import { useTableLogic } from "@/Components/Liv/Utils/table-logic";
 
 const props = defineProps({
   title: String,
