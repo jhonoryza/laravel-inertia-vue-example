@@ -1,6 +1,4 @@
 <script setup>
-import debounce from "@/Utils/debounce";
-import { router } from "@inertiajs/vue3";
 import {
   IconDotsVertical,
   IconFilterFilled,
@@ -8,12 +6,12 @@ import {
   IconSearch,
   IconX,
 } from "@tabler/icons-vue";
-import { computed, reactive, ref, watchEffect } from "vue";
 import DeleteModal from "./DeleteModal.vue";
 import Checkbox from "./Checkbox.vue";
 import InputText from "./InputText.vue";
 import Loading from "./Loading.vue";
 import Pagination from "./Pagination.vue";
+import { useTableLogic } from "@/Utils/table-logic";
 
 const props = defineProps({
   title: String,
@@ -52,186 +50,34 @@ const props = defineProps({
   },
 });
 
-// filter handler section
-
-const openFilter = ref(false);
-
-const filter = reactive({});
-
-// function to initialize dynamic filter
-const updateReactiveFilters = (items) => {
-  Object.keys(filter).forEach((key) => {
-    delete filter[key];
-  });
-  items.forEach((item) => {
-    filter[item] = "";
-  });
-};
-
-// init filter
-updateReactiveFilters(props.filters);
-
-props.filters.forEach((item) => {
-  watchEffect(() => {
-    if (filter[item] !== "") {
-      debouncedFilter();
-    }
-  });
-});
-
-const debouncedFilter = debounce(() => {
-  applyFilter();
-}, 300);
-
-const applyFilter = () => {
-  let params = {
-    filter: {},
-  };
-  for (const [key, value] of Object.entries(props.filters)) {
-    if (filter[value] !== "") {
-      params.filter[value] = filter[value];
-    }
-  }
-  router.get(route(`${props.module}.index`), params, {
-    preserveState: true,
-  });
-  selectAll.value = false;
-  selectedRows.value = [];
-};
-
-const resetFilter = () => {
-  for (const [key, value] of Object.entries(props.filters)) {
-    if (value == "search") {
-      continue;
-    }
-    filter[value] = "";
-  }
-  applyFilter();
-};
-
-// search handler section
-
-const onSearchInput = () => {
-  debouncedFilter();
-};
-
-const clearSearch = () => {
-  filter.search = "";
-  applyFilter();
-};
-
-const clearSearchAndFilter = () => {
-  clearSearch();
-  resetFilter();
-};
-
-const removeFilter = (key) => {
-  if (key == "search") {
-    clearSearch();
-  } else {
-    filter[key] = "";
-  }
-  applyFilter();
-};
-
-const filterCount = computed(() => {
-  let count = 0;
-  for (const [key, value] of Object.entries(props.filters)) {
-    if (filter[value] != "") {
-      count++;
-    }
-  }
-  return count;
-});
-
-// select row handler section
-
-const selectedRows = ref([]);
-const selectAll = ref(false);
-
-const toggleSelectAll = () => {
-  if (selectAll.value) {
-    selectedRows.value = props.items.data.map((item) => item.id);
-  } else {
-    selectedRows.value = [];
-  }
-};
-
-const selectAllRows = async () => {
-  if (selectedRows.value.length < props.allIds.length) {
-    isLoading.value = true;
-    await new Promise((r) => setTimeout(r, 100));
-    selectAll.value = true;
-    selectedRows.value = props.allIds;
-    await new Promise((r) => setTimeout(r, 100));
-    isLoading.value = false;
-  }
-};
-
-const clearSelectedRows = () => {
-  selectedRows.value = [];
-  selectAll.value = false;
-};
-
-// sorting handler section
-const defaultSorts = props.defaultSort.split("-");
-const sortKey = ref(defaultSorts[1] || defaultSorts[0]);
-const sortOrder = ref(defaultSorts.length > 1 ? "desc" : "asc");
-
-const sortColumn = (key) => {
-  if (sortKey.value === key) {
-    sortOrder.value = sortOrder.value === "asc" ? "desc" : "asc";
-  } else {
-    sortKey.value = key;
-    sortOrder.value = "asc";
-  }
-  const sort = sortOrder.value === "desc" ? `-${sortKey.value}` : sortKey.value;
-  router.get(
-    route(`${props.module}.index`),
-    { sort: sort },
-    { preserveState: true },
-  );
-};
-
-// action and confirm dialog handler section
-
-const openAction = ref(false);
-
-const confirmDeleteDialog = ref(null);
-
-const confirmDelete = (deleteRoute, message) => {
-  confirmDeleteDialog.value.openModal(deleteRoute, message);
-};
-
-// toggle column handler section
-
-const columns = ref(props.columns);
-
-const visibleColumns = computed(() =>
-  columns.value.filter((column) => column.visible),
-);
-
-const openToggleColumn = ref(false);
-
-const toggleColumn = (key) => {
-  const column = columns.value.find((col) => col.key === key);
-  column.visible = !column.visible;
-};
-
-// page handler section
-
-const pageOptionValue = ref(props.limit);
-
-const changePageOptions = () => {
-  router.get(
-    route(`${props.module}.index`),
-    { limit: pageOptionValue.value },
-    { preserveState: true },
-  );
-};
-
-// loading handler section
-const isLoading = ref(false);
+const {
+  openFilter,
+  filter,
+  filterCount,
+  selectedRows,
+  selectAll,
+  sortKey,
+  sortOrder,
+  openAction,
+  confirmDeleteDialog,
+  columns,
+  visibleColumns,
+  openToggleColumn,
+  pageOptionValue,
+  isLoading,
+  resetFilter,
+  onSearchInput,
+  clearSearch,
+  clearSearchAndFilter,
+  removeFilter,
+  toggleSelectAll,
+  selectAllRows,
+  clearSelectedRows,
+  sortColumn,
+  confirmDelete,
+  toggleColumn,
+  changePageOptions,
+} = useTableLogic(props);
 </script>
 
 <template>
