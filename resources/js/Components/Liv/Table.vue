@@ -256,7 +256,7 @@ const {
     </div>
     <!-- end search dan filter -->
 
-    <!-- selected rows -->
+    <!-- selected rows indicator -->
     <div
       class="flex justify-between items-center border-t bg-slate-100 dark:bg-gray-800 dark:text-white py-2 px-4 text-sm font-bold"
       v-if="selectedRows.length"
@@ -273,9 +273,9 @@ const {
         </button>
       </div>
     </div>
-    <!-- end selected rows -->
+    <!-- end selected rows indicator -->
 
-    <!-- filter indicator to list all filtered name -->
+    <!-- selected filter indicator -->
     <div
       class="flex justify-between items-center border-t border-slate-300 dark:border-gray-300 bg-slate-100 py-2 px-4 dark:bg-gray-800 dark:text-white"
       v-if="route().params.filter"
@@ -300,16 +300,16 @@ const {
         <IconX class="size-4" @click="clearSearchAndFilter"></IconX>
       </button>
     </div>
-    <!-- end filter indicator to list all filtered name -->
+    <!-- end selected filter indicator -->
 
-    <!-- header section -->
+    <!-- table title section -->
     <div
       v-if="title"
       class="px-4 py-2 text-slate-700 font-bold border-t border-slate-300 bg-slate-100 dark:bg-gray-800 dark:text-white"
     >
       <h1>{{ title }}</h1>
     </div>
-    <!-- end header section -->
+    <!-- end table title section -->
 
     <!-- table -->
     <div
@@ -405,7 +405,7 @@ const {
     </div>
     <!-- end table -->
 
-    <!-- empty state -->
+    <!-- table empty state -->
     <div
       v-if="!items.data.length"
       class="text-center p-4 h-72 flex flex-col justify-center items-center gap-2 border-t border-slate-300 dark:border-gray-300"
@@ -413,9 +413,9 @@ const {
       <IconX class="size-7"></IconX>
       <span>No Data</span>
     </div>
-    <!-- end empty state -->
+    <!-- end table empty state -->
 
-    <!-- pagination -->
+    <!-- table pagination -->
     <div
       class="border-t border-slate-300 dark:border-gray-300 flex justify-between items-center px-4 py-2 dark:text-white"
       v-if="items.data.length"
@@ -452,7 +452,7 @@ const {
         :links="items.links"
       />
     </div>
-    <!-- end pagination -->
+    <!-- end table pagination -->
   </div>
   <!-- end table container -->
 

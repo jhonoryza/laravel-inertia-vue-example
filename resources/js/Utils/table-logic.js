@@ -7,7 +7,7 @@ import { useTableToggleColumn } from "./table-toggle-column";
 import { useTableAction } from "./table-action";
 
 export function useTableLogic(props) {
-  // loading handler section
+  // spinner modal reference
   const isLoading = ref(false);
 
   const {
