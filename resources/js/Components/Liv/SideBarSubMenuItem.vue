@@ -3,6 +3,7 @@
     <button
       @click="toggleSubmenu"
       class="flex items-center justify-between w-full py-2 px-4 mb-2 rounded focus:outline-none hover:bg-gray-100 hover:dark:bg-gray-700"
+      :class="item.class"
     >
       <span>{{ item.title }}</span>
       <svg

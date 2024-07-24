@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import { IconHome, IconSettings, IconUsers } from "@tabler/icons-vue";
 import SideBarMenuItem from "./SideBarMenuItem.vue";
-import ResponsiveNavLink from "../ResponsiveNavLink.vue";
+import { usePage } from "@inertiajs/vue3";
 
 /**
  * id harus unique
@@ -36,6 +36,28 @@ const menuItems = ref([
       },
     ],
   },
+  {
+    id: 3,
+    title: usePage().props.auth.user.name,
+    class: "xl:hidden",
+    children: [
+      {
+        id: 31,
+        title: "Profile",
+        routeName: "profile.edit",
+        component: "Profile/Edit",
+        icon: null,
+      },
+      {
+        id: 32,
+        title: "Logout",
+        routeName: "logout",
+        component: "",
+        icon: null,
+        method: "post",
+      },
+    ],
+  },
 ]);
 </script>
 
@@ -52,27 +74,6 @@ const menuItems = ref([
           <SideBarMenuItem :item="item" />
         </li>
       </ul>
-      <div
-        class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600 xl:hidden"
-      >
-        <div class="px-4">
-          <div class="font-medium text-base text-gray-800 dark:text-gray-200">
-            {{ $page.props.auth.user.name }}
-          </div>
-          <div class="font-medium text-sm text-gray-500">
-            {{ $page.props.auth.user.email }}
-          </div>
-        </div>
-
-        <div class="flex flex-col mt-3 space-y-1">
-          <ResponsiveNavLink :href="route('profile.edit')">
-            Profile
-          </ResponsiveNavLink>
-          <ResponsiveNavLink :href="route('logout')" method="post" as="button">
-            Log Out
-          </ResponsiveNavLink>
-        </div>
-      </div>
     </div>
   </aside>
 </template>
