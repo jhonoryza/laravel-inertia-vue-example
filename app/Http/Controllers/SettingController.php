@@ -59,7 +59,7 @@ class SettingController extends Controller
                 'settings' => $data,
                 'pageOptions' => $this->pageOptions,
                 'limit' => $data->perPage(),
-                'allIds' => inertia()->lazy(fn () => $builder->pluck('id')),
+                'allIds' => $builder->select('id')->pluck('id')->toArray(),
                 'columns' => [
                     ['key' => 'id', 'label' => 'ID', 'visible' => true, 'sortable' => true],
                     ['key' => 'key', 'label' => 'Key', 'visible' => true, 'sortable' => true],
