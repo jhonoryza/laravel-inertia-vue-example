@@ -5,6 +5,7 @@ import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
 import { IconChevronRight } from "@tabler/icons-vue";
 import { Head } from "@inertiajs/vue3";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 const props = defineProps({
   user: {
@@ -74,6 +75,11 @@ const props = defineProps({
                 class="mt-1 block w-full"
                 disabled
               />
+            </div>
+            <div class="flex items-center gap-4">
+              <PrimaryButton @click="$inertia.get(route('users.edit', user.id))"
+                >Edit
+              </PrimaryButton>
             </div>
           </div>
         </section>
