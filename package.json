@@ -13,8 +13,6 @@
         "autoprefixer": "^10.4.12",
         "axios": "^1.6.4",
         "eslint": "^8.57.0",
-        "flowbite": "^2.4.1",
-        "flowbite-vue": "^0.1.5",
         "laravel-vite-plugin": "^1.0",
         "postcss": "^8.4.31",
         "prettier": "^3.3.3",
