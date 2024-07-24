@@ -1,5 +1,5 @@
 <script setup>
-import Table from "@/Components/Liv/Table.vue";
+import Table from "@/Components/Vien/Table.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import {
@@ -9,8 +9,8 @@ import {
   IconEye,
   IconChevronRight,
 } from "@tabler/icons-vue";
-import InputText from "@/Components/Liv/InputText.vue";
-import Container from "@/Components/Liv/Container.vue";
+import InputText from "@/Components/Vien/InputText.vue";
+import Container from "@/Components/Vien/Container.vue";
 
 const props = defineProps({
   table: {

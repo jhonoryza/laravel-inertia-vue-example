@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
 import { usePage } from "@inertiajs/vue3";
-import Toast from "@/Components/Liv/Toast.vue";
+import Toast from "./Toast.vue";
 
 const messages = ref([]);
 onMounted(() => {
