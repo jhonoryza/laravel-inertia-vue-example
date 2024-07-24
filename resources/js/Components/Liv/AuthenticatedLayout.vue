@@ -4,9 +4,9 @@ import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import { Link } from "@inertiajs/vue3";
-import ToggleDarkMode from "@/Components/Liv/ToggleDarkMode.vue";
-import AppToast from "@/Components/Liv/AppToast.vue";
-import SideBar from "@/Components/Liv/SideBar.vue";
+import ToggleDarkMode from "./ToggleDarkMode.vue";
+import AppToast from "./AppToast.vue";
+import SideBar from "./SideBar.vue";
 
 const showingNavigationDropdown = ref(false);
 </script>
