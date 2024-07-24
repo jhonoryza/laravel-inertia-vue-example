@@ -43,7 +43,7 @@ class SettingController extends Controller
         /** @var Collection $paginated */
         $paginated = $builder
             ->clone()
-            ->simplePaginate(perPage: $limit, page: $page);
+            ->paginate(perPage: $limit, page: $page);
         // ->cursorPaginate(perPage: $limit, cursorName: 'page');
 
         $data = $paginated

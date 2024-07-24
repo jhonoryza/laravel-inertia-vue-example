@@ -158,7 +158,7 @@ const toggleSelectAll = () => {
 };
 
 const selectAllRows = async () => {
-  if (selectAll.value == false) {
+  if (selectedRows.value.length < props.allIds.length) {
     isLoading.value = true;
     await new Promise((r) => setTimeout(r, 100));
     selectAll.value = true;
@@ -220,7 +220,6 @@ const toggleColumn = (key) => {
 
 // page handler section
 
-const currentPage = ref(props.items.current_page);
 const pageOptionValue = ref(props.limit);
 
 const changePageOptions = () => {
@@ -228,14 +227,6 @@ const changePageOptions = () => {
     route(`${props.module}.index`),
     { limit: pageOptionValue.value },
     { preserveState: true },
-  );
-};
-
-const onPageChanged = (page) => {
-  router.get(
-    route(`${props.module}.index`),
-    { page: page, limit: pageOptionValue.value },
-    { preserveState: true, preserveScroll: true },
   );
 };
 
