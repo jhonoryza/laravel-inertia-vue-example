@@ -39,12 +39,13 @@ class UserController extends Controller
                 fn (Builder $query) => $query->orderBy('id', 'asc'),
             );
 
-        /** @var Collection $paginatedUsers */
-        $paginatedUsers = $builder
+        /** @var Collection $paginated */
+        $paginated = $builder
             ->clone()
-            ->paginate(perPage: $limit, page: $page);
+            ->simplePaginate(perPage: $limit, page: $page);
+        // ->cursorPaginate(perPage: $limit, cursorName: 'page');
 
-        $users = $paginatedUsers
+        $data = $paginated
             ->through(fn ($user) => [
                 'id' => $user->id,
                 'name' => $user->name,
@@ -55,10 +56,10 @@ class UserController extends Controller
 
         return Inertia::render('User/Index', [
             'table' => [
-                'users' => $users,
+                'users' => $data,
                 'pageOptions' => $this->pageOptions,
-                'limit' => $users->perPage(),
-                'allIds' => $builder->select('id')->pluck('id')->toArray(),
+                'limit' => $data->perPage(),
+                'allIds' => method_exists($paginated, 'total') ? $builder->select('id')->pluck('id')->toArray() : [],
                 'columns' => [
                     ['key' => 'id', 'label' => 'ID', 'visible' => true, 'sortable' => true],
                     ['key' => 'name', 'label' => 'Name', 'visible' => true, 'sortable' => true],

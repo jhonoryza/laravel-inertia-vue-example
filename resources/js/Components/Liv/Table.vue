@@ -8,12 +8,12 @@ import {
   IconSearch,
   IconX,
 } from "@tabler/icons-vue";
-import { FwbPagination } from "flowbite-vue";
-import { computed, reactive, ref, watch, watchEffect } from "vue";
+import { computed, reactive, ref, watchEffect } from "vue";
 import DeleteModal from "./DeleteModal.vue";
 import Checkbox from "./Checkbox.vue";
 import InputText from "./InputText.vue";
 import Loading from "./Loading.vue";
+import Pagination from "./Pagination.vue";
 
 const props = defineProps({
   title: String,
@@ -235,7 +235,7 @@ const onPageChanged = (page) => {
   router.get(
     route(`${props.module}.index`),
     { page: page, limit: pageOptionValue.value },
-    { preserveState: true },
+    { preserveState: true, preserveScroll: true },
   );
 };
 
@@ -425,7 +425,7 @@ const isLoading = ref(false);
       v-if="selectedRows.length"
     >
       <span>{{ selectedRows.length }} records selected</span>
-      <div class="flex justify-between items-center gap-4">
+      <div class="flex justify-between items-center gap-4" v-if="items.total">
         <button @click="selectAllRows">
           <span class="text-yellow-500 hover:text-yellow-700"
             >Select all ({{ items.total }})</span
@@ -583,8 +583,17 @@ const isLoading = ref(false);
       class="border-t border-slate-300 dark:border-gray-300 flex justify-between items-center px-4 py-2 dark:text-white"
       v-if="items.data.length"
     >
-      <span class="text-sm hidden md:block">
+      <span
+        class="text-sm hidden md:block"
+        v-if="items.total && items.from && items.to"
+      >
         Showing {{ items.from }} to {{ items.to }} of {{ items.total }} entries
+      </span>
+      <span
+        class="text-sm hidden md:block"
+        v-else-if="items.total == undefined && items.from && items.to"
+      >
+        Showing {{ items.from }} to {{ items.to }}
       </span>
       <div
         class="rounded-lg text-sm grid grid-cols-2 divide-x-4 divide-slate-400 items-center justify-evenly"
@@ -600,16 +609,11 @@ const isLoading = ref(false);
           </option>
         </select>
       </div>
-      <FwbPagination
-        :total-pages="items.last_page"
-        v-model="currentPage"
-        :per-page="limit"
-        :total-items="items.total"
-        v-on:page-changed="onPageChanged"
-        :enable-first-and-last-buttons="true"
-        class="text-sm justify-center"
-      >
-      </FwbPagination>
+      <Pagination
+        :next-page-url="items.next_page_url"
+        :prev-page-url="items.prev_page_url"
+        :links="items.links"
+      />
     </div>
     <!-- end pagination -->
   </div>

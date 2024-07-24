@@ -22,6 +22,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
     Route::delete('users/bulk-delete', [UserController::class, 'bulkDestroy'])->name('users.bulk-delete');
     Route::resource('users', UserController::class);
+    Route::delete('settings/bulk-delete', [SettingController::class, 'bulkDestroy'])->name('settings.bulk-delete');
     Route::resource('settings', SettingController::class);
 });
 

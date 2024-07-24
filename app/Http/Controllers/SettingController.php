@@ -43,7 +43,8 @@ class SettingController extends Controller
         /** @var Collection $paginated */
         $paginated = $builder
             ->clone()
-            ->paginate(perPage: $limit, page: $page);
+            ->simplePaginate(perPage: $limit, page: $page);
+        // ->cursorPaginate(perPage: $limit, cursorName: 'page');
 
         $data = $paginated
             ->through(fn ($item) => [
@@ -59,7 +60,7 @@ class SettingController extends Controller
                 'settings' => $data,
                 'pageOptions' => $this->pageOptions,
                 'limit' => $data->perPage(),
-                'allIds' => $builder->select('id')->pluck('id')->toArray(),
+                'allIds' => method_exists($paginated, 'total') ? $builder->select('id')->pluck('id')->toArray() : [],
                 'columns' => [
                     ['key' => 'id', 'label' => 'ID', 'visible' => true, 'sortable' => true],
                     ['key' => 'key', 'label' => 'Key', 'visible' => true, 'sortable' => true],
