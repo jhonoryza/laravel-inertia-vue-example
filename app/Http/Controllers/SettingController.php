@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Setting;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class SettingController extends Controller
 {
@@ -19,19 +18,27 @@ class SettingController extends Controller
         $limit = request('limit', 10);
         $page = request('page', 1);
 
-        $builder = QueryBuilder::for(Setting::class)
-            ->defaultSort('-created_at')
-            ->allowedSorts(['id', 'key', 'value', 'created_at'])
-            ->allowedFilters([
-                'key',
-                'value',
-                AllowedFilter::callback('search', function (Builder $query, $value) {
-                    $query->where(function (Builder $query) use ($value) {
-                        $query->where('key', 'like', "%{$value}%")
-                            ->orWhere('value', 'like', "%{$value}%");
-                    });
-                }),
-            ]);
+        $builder = DB::table('settings')
+            ->select('id', 'key', 'value', 'created_at')
+            ->when(request('filter.search'), function (Builder $query, $search) {
+                $query->where(function (Builder $query) use ($search) {
+                    $query->where('key', 'like', "%{$search}%")
+                        ->orWhere('value', 'like', "%{$search}%");
+                });
+            })
+            ->when(
+                request('filter.key'),
+                fn (Builder $query, $filter) => $query->where('key', 'like', "%{$filter}%")
+            )
+            ->when(
+                request('filter.value'),
+                fn (Builder $query, $filter) => $query->where('value', $filter)
+            )
+            ->when(
+                request('sort'),
+                fn (Builder $query, $sort) => $query->orderBy($sort[0] == '-' ? ltrim($sort, '-') : $sort, $sort[0] == '-' ? 'desc' : 'asc'),
+                fn (Builder $query) => $query->orderBy('id', 'asc'),
+            );
 
         /** @var Collection $paginated */
         $paginated = $builder
@@ -43,7 +50,7 @@ class SettingController extends Controller
                 'id' => $item->id,
                 'key' => $item->key,
                 'value' => $item->value,
-                'created_at' => $item->created_at->format('d F Y'),
+                'created_at' => $item->created_at,
             ])
             ->withQueryString();
 

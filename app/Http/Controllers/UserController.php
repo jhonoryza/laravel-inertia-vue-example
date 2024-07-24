@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class UserController extends Controller
 {
@@ -18,20 +17,27 @@ class UserController extends Controller
     {
         $limit = request('limit', 10);
         $page = request('page', 1);
-
-        $builder = QueryBuilder::for(User::class)
-            ->defaultSort('-created_at')
-            ->allowedSorts(['id', 'name', 'email', 'created_at'])
-            ->allowedFilters([
-                'name',
-                'email',
-                AllowedFilter::callback('search', function (Builder $query, $value) {
-                    $query->where(function (Builder $query) use ($value) {
-                        $query->where('name', 'like', "%{$value}%")
-                            ->orWhere('email', 'like', "%{$value}%");
-                    });
-                }),
-            ]);
+        $builder = DB::table('users')
+            ->select('id', 'name', 'email', 'created_at')
+            ->when(request('filter.search'), function (Builder $query, $search) {
+                $query->where(function (Builder $query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                });
+            })
+            ->when(
+                request('filter.name'),
+                fn (Builder $query, $name) => $query->where('name', 'like', "%{$name}%")
+            )
+            ->when(
+                request('filter.email'),
+                fn (Builder $query, $email) => $query->where('email', $email)
+            )
+            ->when(
+                request('sort'),
+                fn (Builder $query, $sort) => $query->orderBy($sort[0] == '-' ? ltrim($sort, '-') : $sort, $sort[0] == '-' ? 'desc' : 'asc'),
+                fn (Builder $query) => $query->orderBy('id', 'asc'),
+            );
 
         /** @var Collection $paginatedUsers */
         $paginatedUsers = $builder
@@ -43,7 +49,7 @@ class UserController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-                'created_at' => $user->created_at->format('d F Y'),
+                'created_at' => $user->created_at,
             ])
             ->withQueryString();
 
@@ -52,7 +58,7 @@ class UserController extends Controller
                 'users' => $users,
                 'pageOptions' => $this->pageOptions,
                 'limit' => $users->perPage(),
-                'allIds' => $builder->pluck('id'),
+                'allIds' => $builder->select('id')->pluck('id')->toArray(),
                 'columns' => [
                     ['key' => 'id', 'label' => 'ID', 'visible' => true, 'sortable' => true],
                     ['key' => 'name', 'label' => 'Name', 'visible' => true, 'sortable' => true],

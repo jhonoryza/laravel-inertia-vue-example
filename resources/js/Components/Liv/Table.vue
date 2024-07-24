@@ -13,6 +13,7 @@ import { computed, reactive, ref, watch, watchEffect } from "vue";
 import DeleteModal from "./DeleteModal.vue";
 import Checkbox from "./Checkbox.vue";
 import InputText from "./InputText.vue";
+import Loading from "./Loading.vue";
 
 const props = defineProps({
   title: String,
@@ -156,9 +157,15 @@ const toggleSelectAll = () => {
   }
 };
 
-const selectAllRows = () => {
-  selectAll.value = true;
-  selectedRows.value = props.allIds;
+const selectAllRows = async () => {
+  if (selectAll.value == false) {
+    isLoading.value = true;
+    await new Promise((r) => setTimeout(r, 100));
+    selectAll.value = true;
+    selectedRows.value = props.allIds;
+    await new Promise((r) => setTimeout(r, 100));
+    isLoading.value = false;
+  }
 };
 
 const clearSelectedRows = () => {
@@ -231,9 +238,13 @@ const onPageChanged = (page) => {
     { preserveState: true },
   );
 };
+
+// loading handler section
+const isLoading = ref(false);
 </script>
 
 <template>
+  <Loading :loading="isLoading" />
   <!-- table container -->
   <div
     class="mt-4 bg-white dark:bg-gray-800 dark:text-white border border-slate-300 rounded-lg overflow-hidden"
